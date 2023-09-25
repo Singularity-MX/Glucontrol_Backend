@@ -1,9 +1,10 @@
 const mysql = require('mysql');
 
+//windows conection
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Javier1234567890$',
+    password: '',
     database: 'glucontroldb'
 });
 
@@ -23,3 +24,17 @@ module.exports = connection;
     password: 'Javier1234567890$',
     database: 'ejemplo'
     */
+
+
+
+   /* Linux
+   
+   
+   const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'Javier1234567890$',
+    database: 'glucontroldb'
+});
+
+*/
