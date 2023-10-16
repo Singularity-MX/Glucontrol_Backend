@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //IMPORTS
 const { InsertarUsuarios} = require('./Module1/Module1Functions');
 const { Login } = require('./Module2/Module2Function');
-const { EditUserInformation,GetUserInformation, DeleteUserAccount } = require('./Module3/Module3Function');
+const { EditUserInformation,GetUserInformation, DeleteUserAccount, test } = require('./Module3/Module3Function');
 const {CreateFood, UpdateFoodInformation, DeleteFood, GetUserFoods,
   CreateActivity, GetActivitiesByUID, UpdateActivity, DeleteActivity, 
   CreateGlucoseReading, GetGlucoseReadings, UpdateGlucoseReadingByNumber, DeleteGlucoseReading} = require('./Module4/Module4Functions');
@@ -26,6 +26,7 @@ const {CreateFood, UpdateFoodInformation, DeleteFood, GetUserFoods,
 app.post('/api/Module1/Login/Insert', async (req, res) => {
   //Método para registrar al usuario
   const formData = req.body;
+  console.log(formData);
  InsertarUsuarios(req, res, formData);
 });
 //------------------------------------------------------------- MODULO 2
@@ -48,6 +49,7 @@ app.put('/api/Module3/EditUser/:UID', async (req, res) => {
 // Obtener info del usuario
 app.get('/api/Module3/GetUser/:UID', async (req, res) => {
   const UID = req.params.UID; // Obtener el UID del usuario a consultar
+  console.log("EL UID DADO ES: "+UID);
   GetUserInformation(req, res, UID);
 });
 
@@ -56,6 +58,8 @@ app.delete('/api/Module3/DeleteUser/:UID', async (req, res) => {
   const UID = req.params.UID; // Obtener el UID del usuario a eliminar
   DeleteUserAccount(req, res, UID);
 });
+
+
 
 //------------------------------------------------------------- MODULO 4
 ///// foods
@@ -138,6 +142,14 @@ app.delete('/api/Module4/DeleteGlucoseReading/:Number', async (req, res) => {
 // Ruta de ejemplo
 app.get('/', (req, res) => {
   res.send('¡Hola, mundo!');
+});
+
+// Obtener info del usuario
+app.post('/test', async (req, res) => {
+  const formData = req.body; // Datos de la nueva actividad
+  console.log("Entro");
+  console.log(formData);
+  //test(req, res);
 });
 
 // Inicia el servidor

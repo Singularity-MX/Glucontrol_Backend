@@ -11,28 +11,37 @@ function generarFID(){
   }
 
 /////////////////////create
-function CreateFood(req, res, foodData) {
+async function CreateFood(req, res, foodData) {
+  try {
     // Generar un ID único para el nuevo alimento (FID)
-    const FID = generarFID();
-  
-    // Crear JSON para el nuevo alimento
+    const FID = generarFID(); // Supongo que tienes una función para generar FID
+
+    // Crear un objeto que representa el nuevo alimento
     const newFood = {
       FID: FID,
       UID: foodData.UID,
       Food_name: foodData.Food_name,
       Classification: foodData.Classification
     };
-  
-    // Realizar una consulta para insertar el nuevo alimento en la tabla Foods
-    connection.query('INSERT INTO Foods SET ?', newFood, (error, results) => {
-      if (error) {
-        console.error('Error al crear el alimento:', error);
-        res.sendStatus(500); // Error del servidor
-      } else {
-        res.status(201).json({ message: 'Alimento creado', FID: FID });
-      }
-    });
+
+    // Realizar la inserción en la tabla "Foods"
+    const insertQuery = `
+      INSERT INTO "foods"("FID", "UID", "Food_name", "Classification")
+      VALUES ($1, $2, $3, $4)
+    `;
+    const values = [newFood.FID, newFood.UID, newFood.Food_name, newFood.Classification];
+
+    await connection.query(insertQuery, values);
+
+    // Si llegamos a este punto, la inserción fue exitosa
+    res.status(200).json({ message: 'Alimento creado exitosamente' });
+  } catch (error) {
+    console.error('Error al crear el alimento:', error);
+    res.status(500).json({ error: 'Error del servidor' });
   }
+}
+
+
 
 
 

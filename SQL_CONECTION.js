@@ -1,14 +1,17 @@
-const mysql = require('mysql');
+const { Pool } = require('pg');
 
-//windows conection
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'glucontroldb'
+
+const connection = new Pool({
+  user: 'root',
+  host: 'dpg-ckl0b1rj89us73bkl0kg-a.oregon-postgres.render.com',
+  database: 'glucontroldb',
+  password: 'LMHKruifzLnDDCvEFpnLRDuJL3b16nuW',
+  port: 5432,
+  ssl: true, // Habilita la conexión SSL
 });
 
-connection.connect((error) => {
+
+connection.connect((error, client, done) => {
   if (error) {
     console.error('Error al conectar a la base de datos:', error);
   } else {
@@ -18,23 +21,32 @@ connection.connect((error) => {
 
 module.exports = connection;
 
-/*
-  host: '127.0.0.1',
-    user: 'root',
-    password: 'Javier1234567890$',
-    database: 'ejemplo'
-    */
 
+/**
+local conection
 
-
-   /* Linux
-   
-   
-   const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'Javier1234567890$',
-    database: 'glucontroldb'
+const connection = new Pool({
+  user: 'postgres',
+  host: 'localhost', // o la dirección de tu servidor PostgreSQL
+  database: 'glucontroldb',
+  password: 'root',
+  port: 5432, // El puerto predeterminado de PostgreSQL es 5432
 });
 
-*/
+
+SERVER RENDEER CONECTION
+
+const connection = new Pool({
+  user: 'root',
+  host: 'dpg-ckl0b1rj89us73bkl0kg-a.oregon-postgres.render.com',
+  database: 'glucontroldb',
+  password: 'LMHKruifzLnDDCvEFpnLRDuJL3b16nuW',
+  port: 5432,
+  ssl: true, // Habilita la conexión SSL
+});
+
+
+ */
+
+
+
