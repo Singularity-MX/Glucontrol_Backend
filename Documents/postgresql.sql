@@ -60,7 +60,7 @@ e7786597-f773-4494-926e-f9e87332105a
 //////////////////////////////////////////////////////////SEED DATA
 -- Agregar un usuario en la tabla "users"
 INSERT INTO "users" ("UID", "Email", "Password")
-VALUES ('e7786597-f773-4494-926e-f9e87332105a', 'admin@admin.com', 'Javier12345');
+VALUES ('e7786597-f773-4494-926e-f9e87332105a', 'admin@admin.com', 'bd57085c42c7a6b15d1e09e990d3638cbc6bb515fae4010939b37fd6886674bb');
 
 -- Agregar información personal en la tabla "personal_information"
 INSERT INTO "personal_information" ("UID", "Nombre", "ApellidoPaterno", "ApellidoMaterno", "FechaNacimiento", "Altura", "Peso", "IMC")
