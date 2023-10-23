@@ -11,7 +11,7 @@ function generarFID(){
   }
 
 /////////////////////create
-async function CreateFood(req, res, foodData) {
+async function CreateFood(req, res, foodData, UID) {
   try {
     // Generar un ID único para el nuevo alimento (FID)
     const FID = generarFID(); // Supongo que tienes una función para generar FID
@@ -19,7 +19,7 @@ async function CreateFood(req, res, foodData) {
     // Crear un objeto que representa el nuevo alimento
     const newFood = {
       FID: FID,
-      UID: foodData.UID,
+      UID: UID,
       Food_name: foodData.Food_name,
       Classification: foodData.Classification
     };
@@ -32,7 +32,7 @@ async function CreateFood(req, res, foodData) {
     const values = [newFood.FID, newFood.UID, newFood.Food_name, newFood.Classification];
 
     await connection.query(insertQuery, values);
-
+    console.log('> Nuevo alimento ('+newFood.Food_name+' -> '+ newFood.Classification+' )');
     // Si llegamos a este punto, la inserción fue exitosa
     res.status(200).json({ message: 'Alimento creado exitosamente' });
   } catch (error) {
@@ -44,149 +44,183 @@ async function CreateFood(req, res, foodData) {
 
 
 
+async function GetUserFoods(req, res, UID) {
+  try {
+    // Consultar la base de datos para obtener FID, Food_name y Classification relacionados con un usuario específico (UID)
+    const query = `
+      SELECT "FID", "Food_name", "Classification"
+      FROM "foods"
+      WHERE "UID" = $1
+    `;
+    const values = [UID];
 
-  function GetUserFoods(req, res, UID) {
-    // Realizar una consulta para obtener la lista de alimentos por UID
-    connection.query('SELECT * FROM Foods WHERE UID = ?', [UID], (error, results) => {
-      if (error) {
-        console.error('Error al obtener la lista de alimentos:', error);
-        res.sendStatus(500); // Error del servidor
-      } else {
-        if (results.length > 0) {
-          // Alimentos encontrados, enviar la lista como respuesta JSON
-          const foodsList = results;
-          res.status(200).json(foodsList);
-        } else {
-          // No se encontraron alimentos para el UID proporcionado
-          res.sendStatus(404); // Código 404 para indicar que no se encontró el recurso
-        }
-      }
-    });
+    const result = await connection.query(query, values);
+    console.log('> Obteniendo Alimentos ✓ ('+UID+')');
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error al obtener los alimentos:', error);
+    res.status(500).json({ error: 'Error del servidor' });
   }
+}
 
-  function UpdateFoodInformation(req, res, FID, updatedFoodData) {
+
+async function UpdateFoodInformation(req, res, FID, updatedFoodData) {
+  try {
     // Realizar una consulta para actualizar la información del alimento por FID
-    connection.query('UPDATE Foods SET ? WHERE FID = ?', [updatedFoodData, FID], (error, results) => {
-      if (error) {
-        console.error('Error al actualizar información del alimento:', error);
-        res.sendStatus(500); // Error del servidor
-      } else {
-        if (results.affectedRows > 0) {
-          // La información del alimento se actualizó correctamente
-          res.sendStatus(200); // Código 200 para indicar éxito
-        } else {
-          // No se encontró un alimento con el FID proporcionado
-          res.sendStatus(404); // Código 404 para indicar que no se encontró el recurso
-        }
-      }
-    });
+    const updateQuery = `
+      UPDATE "foods"
+      SET "Food_name" = $1, "Classification" = $2
+      WHERE "FID" = $3
+    `;
+    const values = [updatedFoodData.Food_name, updatedFoodData.Classification, FID];
+
+    const result = await connection.query(updateQuery, values);
+
+    if (result.rowCount > 0) {
+      // La información del alimento se actualizó correctamente
+      console.log('> '+updatedFoodData.Food_name+' Modificado ✓ ');
+      res.status(200).json({ message: 'Información del alimento actualizada exitosamente' });
+    } else {
+      // No se encontró un alimento con el FID proporcionado
+      res.status(404).json({ error: 'No se encontró el recurso' });
+    }
+  } catch (error) {
+    console.error('Error al actualizar información del alimento:', error);
+    res.status(500).json({ error: 'Error del servidor' });
   }
+}
 
 
-  function DeleteFood(req, res, FID) {
+
+      
+async function DeleteFood(req, res, FID) {
+  try {
     // Realizar una consulta para eliminar un alimento por FID
-    connection.query('DELETE FROM Foods WHERE FID = ?', [FID], (error, results) => {
-      if (error) {
-        console.error('Error al eliminar el alimento:', error);
-        res.sendStatus(500); // Error del servidor
-      } else {
-        if (results.affectedRows > 0) {
-          // El alimento se eliminó correctamente
-          res.sendStatus(200); // Código 200 para indicar éxito
-        } else {
-          // No se encontró un alimento con el FID proporcionado
-          res.sendStatus(404); // Código 404 para indicar que no se encontró el recurso
-        }
-      }
-    });
+    const deleteQuery = `
+      DELETE FROM "foods"
+      WHERE "FID" = $1
+    `;
+    const values = [FID];
+
+    const result = await connection.query(deleteQuery, values);
+
+    if (result.rowCount > 0) {
+      // El alimento se eliminó correctamente
+      console.log('> (' +FID + ') Eliminado ✓ ');
+      res.status(200).json({ message: 'Alimento eliminado exitosamente' });
+    } else {
+      // No se encontró un alimento con el FID proporcionado
+      res.status(404).json({ error: 'No se encontró el recurso' });
+    }
+  } catch (error) {
+    console.error('Error al eliminar el alimento:', error);
+    res.status(500).json({ error: 'Error del servidor' });
   }
+}
+
 
 
 
 
   ////////////////////////////////////////////////////////////////////////////////////// actividad
 
-  function CreateActivity(req, res, newActivityData) {
-    const AID = generarAID();
-
-    const newAct = {
-      AID: AID,
-      UID: newActivityData.UID,
-      Activitie_name: newActivityData.Activitie_name,
-      Classification: newActivityData.Classification
-    };
-
-    // Realizar una consulta para insertar una nueva actividad
-    connection.query('INSERT INTO Activities SET ?', newAct, (error, results) => {
-      if (error) {
-        console.error('Error al crear la actividad:', error);
-        res.sendStatus(500); // Error del servidor
-      } else {
-        console.log('Actividad creada');
-        res.sendStatus(201); // Código 201 para indicar que se creó con éxito
-      }
-    });
+  async function CreateActivity(req, res, actData, UID) {
+    try {
+      
+      const AID = generarFID(); // Supongo que tienes una función para generar FID
+  
+      const insertQuery = `
+        INSERT INTO "activities"("AID", "UID", "Activitie_name", "Classification")
+        VALUES ($1, $2, $3, $4)
+      `;
+      const values = [AID, UID, actData.Activitie_name, actData.Classification];
+  
+      await connection.query(insertQuery, values);
+      console.log('> Nueva actividad ('+actData.Activitie_name+' -> '+ actData.Classification+' )');
+      // Si llegamos a este punto, la inserción fue exitosa
+      res.status(200).json({ message: 'Actividad creada exitosamente' });
+    } catch (error) {
+      console.error('Error al crear la actividad:', error);
+      res.status(500).json({ error: 'Error del servidor' });
+    }
   }
 
-  function GetActivitiesByUID(req, res, UID) {
-    // Realizar una consulta para obtener las actividades de un usuario por su UID
-    connection.query('SELECT * FROM Activities WHERE UID = ?', [UID], (error, results) => {
-      if (error) {
-        console.error('Error al obtener las actividades:', error);
-        res.sendStatus(500); // Error del servidor
-      } else {
-        if (results.length > 0) {
-          // Actividades encontradas, enviar la lista de actividades como respuesta JSON
-          const activitiesList = results.map((activity) => ({
-            AID: activity.AID,
-            Activitie_name: activity.Activitie_name,
-            Classification: activity.Classification
-          }));
-          res.status(200).json(activitiesList);
-        } else {
-          // No se encontraron actividades para el UID proporcionado
-          res.sendStatus(404); // Código 404 para indicar que no se encontró el recurso
-        }
-      }
-    });
+
+  async function GetActivitiesByUID(req, res, UID) {
+    try {
+      // Consultar la base de datos para obtener FID, Food_name y Classification relacionados con un usuario específico (UID)
+      const query = `
+        SELECT "AID", "Activitie_name", "Classification"
+        FROM "activities"
+        WHERE "UID" = $1
+      `;
+      const values = [UID];
+  
+      const result = await connection.query(query, values);
+      console.log('> Obteniendo Actividades ✓ ('+UID+')');
+      res.status(200).json(result.rows);
+    } catch (error) {
+      console.error('Error al obtener las actividades:', error);
+      res.status(500).json({ error: 'Error del servidor' });
+    }
   }
 
-  function UpdateActivity(req, res, AID, updatedActivityData) {
-    // Realizar una consulta para actualizar los datos de una actividad por su AID
-    connection.query('UPDATE Activities SET ? WHERE AID = ?', [updatedActivityData, AID], (error, results) => {
-      if (error) {
-        console.error('Error al actualizar la actividad:', error);
-        res.sendStatus(500); // Error del servidor
+
+  async function UpdateActivity(req, res, AID, newDataActivitie) {
+    try {
+      // Realizar una consulta para actualizar la información del alimento por FID
+      const updateQuery = `
+        UPDATE "activities"
+        SET "Activitie_name" = $1, "Classification" = $2
+        WHERE "AID" = $3
+      `;
+      const values = [newDataActivitie.Activitie_name, newDataActivitie.Classification, AID];
+  
+      const result = await connection.query(updateQuery, values);
+  
+      if (result.rowCount > 0) {
+        // La información del alimento se actualizó correctamente
+        console.log('> '+newDataActivitie.Activitie_name+' Modificado ✓ ');
+        res.status(200).json({ message: 'Información de actividad actualizada exitosamente' });
       } else {
-        if (results.affectedRows > 0) {
-          // Los datos de la actividad se actualizaron correctamente
-          res.sendStatus(200); // Código 200 para indicar éxito
-        } else {
-          // No se encontró la actividad con el AID proporcionado
-          res.sendStatus(404); // Código 404 para indicar que no se encontró el recurso
-        }
+        // No se encontró un alimento con el FID proporcionado
+        res.status(404).json({ error: 'No se encontró el recurso' });
       }
-    });
+    } catch (error) {
+      console.error('Error al actualizar información de la actividad:', error);
+      res.status(500).json({ error: 'Error del servidor' });
+    }
   }
 
-  function DeleteActivity(req, res, AID) {
-    // Realizar una consulta para eliminar una actividad por su AID
-    connection.query('DELETE FROM Activities WHERE AID = ?', [AID], (error, results) => {
-      if (error) {
-        console.error('Error al eliminar la actividad:', error);
-        res.sendStatus(500); // Error del servidor
+
+  async function DeleteActivity(req, res, AID) {
+    try {
+      // Realizar una consulta para eliminar un alimento por FID
+      const deleteQuery = `
+        DELETE FROM "activities"
+        WHERE "AID" = $1
+      `;
+      const values = [AID];
+  
+      const result = await connection.query(deleteQuery, values);
+  
+      if (result.rowCount > 0) {
+        // El alimento se eliminó correctamente
+        console.log('> (' +AID + ') Eliminado ✓ ');
+        res.status(200).json({ message: 'Actividad eliminado exitosamente' });
       } else {
-        if (results.affectedRows > 0) {
-          // La actividad se eliminó correctamente
-          res.sendStatus(200); // Código 200 para indicar éxito
-        } else {
-          // No se encontró la actividad con el AID proporcionado
-          res.sendStatus(404); // Código 404 para indicar que no se encontró el recurso
-        }
+        // No se encontró un alimento con el FID proporcionado
+        res.status(404).json({ error: 'No se encontró el recurso' });
       }
-    });
+    } catch (error) {
+      console.error('Error al eliminar :', error);
+      res.status(500).json({ error: 'Error del servidor' });
+    }
   }
 
+
+
+  
   ////////////////////////////////////////////////////////////////////////////////////////glucosa
   function assignCategory(glucoseLevel, valueCategories) {
     for (const category of valueCategories) {

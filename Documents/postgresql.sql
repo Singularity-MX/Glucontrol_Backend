@@ -47,3 +47,59 @@ CREATE TABLE "glucose_readings" (
   "Hour" DATE
 );
 
+
+/*
+user: admin@admin.com
+pass:  Javier12345
+
+
+token UID: 
+e7786597-f773-4494-926e-f9e87332105a
+
+
+//////////////////////////////////////////////////////////SEED DATA
+-- Agregar un usuario en la tabla "users"
+INSERT INTO "users" ("UID", "Email", "Password")
+VALUES ('e7786597-f773-4494-926e-f9e87332105a', 'admin@admin.com', 'Javier12345');
+
+-- Agregar información personal en la tabla "personal_information"
+INSERT INTO "personal_information" ("UID", "Nombre", "ApellidoPaterno", "ApellidoMaterno", "FechaNacimiento", "Altura", "Peso", "IMC")
+VALUES ('e7786597-f773-4494-926e-f9e87332105a', 'Juan', 'Gómez', 'López', '1990-03-15', 175, 70, 22.86);
+
+
+
+-- Agregar alimentos de prueba
+INSERT INTO "foods" ("FID", "UID", "Food_name", "Classification")
+VALUES ('1', 'e7786597-f773-4494-926e-f9e87332105a', 'Manzana', 'Frutas');
+
+INSERT INTO "foods" ("FID", "UID", "Food_name", "Classification")
+VALUES ('2', 'e7786597-f773-4494-926e-f9e87332105a', 'Pollo a la parrilla', 'Proteínas');
+
+INSERT INTO "foods" ("FID", "UID", "Food_name", "Classification")
+VALUES ('3', 'e7786597-f773-4494-926e-f9e87332105a', 'Ensalada de espinacas', 'Verduras');
+
+INSERT INTO "foods" ("FID", "UID", "Food_name", "Classification")
+VALUES ('4', 'e7786597-f773-4494-926e-f9e87332105a', 'Pizza', 'Dulces');
+
+INSERT INTO "foods" ("FID", "UID", "Food_name", "Classification")
+VALUES ('5', 'e7786597-f773-4494-926e-f9e87332105a', 'Yogur', 'Productos lácteos');
+
+-- Agregar actividades de prueba
+INSERT INTO "activities" ("AID", "UID", "Activitie_name", "Classification")
+VALUES ('1', 'e7786597-f773-4494-926e-f9e87332105a', 'Caminata', 'Ejercicio');
+
+INSERT INTO "activities" ("AID", "UID", "Activitie_name", "Classification")
+VALUES ('2', 'e7786597-f773-4494-926e-f9e87332105a', 'Trabajo de oficina', 'Trabajo');
+
+INSERT INTO "activities" ("AID", "UID", "Activitie_name", "Classification")
+VALUES ('3', 'e7786597-f773-4494-926e-f9e87332105a', 'Natación', 'Deporte');
+
+INSERT INTO "activities" ("AID", "UID", "Activitie_name", "Classification")
+VALUES ('4', 'e7786597-f773-4494-926e-f9e87332105a', 'Lectura', 'Estudiar');
+
+INSERT INTO "activities" ("AID", "UID", "Activitie_name", "Classification")
+VALUES ('5', 'e7786597-f773-4494-926e-f9e87332105a', 'Descanso', 'Reposo');
+
+
+*/
+
