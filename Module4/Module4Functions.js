@@ -222,6 +222,7 @@ async function DeleteFood(req, res, FID) {
 
   
   ////////////////////////////////////////////////////////////////////////////////////////glucosa
+
   function assignCategory(glucoseLevel, valueCategories) {
     for (const category of valueCategories) {
       if (glucoseLevel >= category.Minimum_Value && glucoseLevel <= category.Maximum_Value) {
@@ -233,44 +234,66 @@ async function DeleteFood(req, res, FID) {
   }
 
   
-  function CreateGlucoseReading(req, res, newGlucoseReading) {
-    // Realizar una consulta para obtener las categorías y sus rangos de valores mínimos y máximos
-    connection.query('SELECT * FROM Value_Categories', (error, valueCategories) => {
-      if (error) {
-        console.error('Error al consultar las categorías de valores:', error);
-        res.sendStatus(500); // Error del servidor
-      } else {
-        // Asignar la categoría según el nivel de glucosa
-        const category = assignCategory(newGlucoseReading.Glucose_level, valueCategories);
-        newGlucoseReading.Category = category;
-  
-        // Insertar la lectura de glucosa en la tabla "Glucose_readings" con la categoría asignada
-        connection.query('INSERT INTO Glucose_readings SET ?', newGlucoseReading, (error, results) => {
-          if (error) {
-            console.error('Error al crear la lectura de glucosa:', error);
-            res.sendStatus(500); // Error del servidor
-          } else {
-            console.log('Lectura de glucosa creada');
-            res.sendStatus(201); // Código 201 para indicar que se creó con éxito
-          }
-        });
+  async function CreateGlucoseReading(req, res, formData, UID) {
+    //obtener los valores de category
+    try {
+      // Consultar la base de datos para obtener los valores de categorías
+      const query = `
+        SELECT *
+        FROM "value_Categories"
+      `;
+      const result = await connection.query(query); // Corregir la variable a 'result'
+      //obtener la categoria  
+      const category = assignCategory(formData.Glucose_level, result.rows);
+      try {
+      
+        const RID = generarFID(); // Supongo que tienes una función para generar FID
+    
+        const insertQuery = `
+          INSERT INTO "glucose_readings"("RID", "UID", "FID", "Cantidad", "AID", "Duration", "Glucose_level", "Category", "Registration_date", "Hour")
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        `;
+        const values = [RID, UID, formData.FID, formData.Cantidad, formData.AID, formData.Duration, formData.Glucose_level,
+          category, formData.Registration_date, formData.Hour];
+    
+        await connection.query(insertQuery, values);
+        console.log('> Nueva lectura Level:'+formData.Glucose_level + ' mg/dl ('+category+')');
+        // Si llegamos a este punto, la inserción fue exitosa
+        res.status(200).json({ message: 'Lectura creada exitosamente' });
+      } catch (error) {
+        console.error('Error al crear la Lectura:', error);
+        res.status(500).json({ error: 'Error del servidor' });
       }
-    });
+    } catch (error) {
+      console.error('Error al obtener las categorías:', error);
+      res.status(500).json({ error: 'Error del servidor' });
+    }
+    
   }
+
+
+  async function GetGlucoseReadings(req, res, UID) {
+    try {
+      // Consultar la base de datos para obtener FID, Food_name y Classification relacionados con un usuario específico (UID)
+      const query = `
+        SELECT *
+        FROM "glucose_readings"
+        WHERE "UID" = $1
+      `;
+      const values = [UID];
   
-
-  function GetGlucoseReadings(req, res, UID) {
-    // Realizar una consulta para obtener las lecturas de glucosa por UID
-    connection.query('SELECT * FROM Glucose_readings WHERE UID = ?', [UID], (error, results) => {
-      if (error) {
-        console.error('Error al obtener las lecturas de glucosa:', error);
-        res.sendStatus(500); // Error del servidor
-      } else {
-        res.status(200).json(results); // Devolver las lecturas de glucosa como JSON
-      }
-    });
+      const result = await connection.query(query, values);
+      console.log('> Obteniendo lecturas ✓ ('+UID+')');
+      res.status(200).json(result.rows);
+    } catch (error) {
+      console.error('Error al obtener las actividades:', error);
+      res.status(500).json({ error: 'Error del servidor' });
+    }
   }
 
+
+
+  //pendiente
   function UpdateGlucoseReadingByNumber(req, res, Number, updatedGlucoseReading) {
 
     connection.query('SELECT * FROM Value_Categories', (error, valueCategories) => {
@@ -299,24 +322,35 @@ async function DeleteFood(req, res, FID) {
       }
     });
   }
+  
 
-  function DeleteGlucoseReading(req, res, Number) {
-    // Realizar una consulta para eliminar el registro de glucosa por Number
-    connection.query('DELETE FROM Glucose_readings WHERE Number = ?', [Number], (error, results) => {
-      if (error) {
-        console.error('Error al eliminar el registro de glucosa:', error);
-        res.sendStatus(500); // Error del servidor
+  async function DeleteGlucoseReading(req, res, RID) {
+    
+    try {
+      // Realizar una consulta para eliminar un alimento por FID
+      const deleteQuery = `
+        DELETE FROM "glucose_readings"
+        WHERE "RID" = $1
+      `;
+      const values = [RID];
+  
+      const result = await connection.query(deleteQuery, values);
+  
+      if (result.rowCount > 0) {
+        // El alimento se eliminó correctamente
+        console.log('> (' +RID + ') Eliminado ✓ ');
+        res.status(200).json({ message: 'Lectura eliminado exitosamente' });
       } else {
-        if (results.affectedRows > 0) {
-          // Se eliminó correctamente al menos un registro
-          res.sendStatus(204); // Código 204 para indicar que no hay contenido (eliminación exitosa)
-        } else {
-          // No se encontró un registro de glucosa con el Number proporcionado
-          res.sendStatus(404); // Código 404 para indicar que no se encontró el recurso
-        }
+        // No se encontró un alimento con el FID proporcionado
+        res.status(404).json({ error: 'No se encontró el recurso' });
       }
-    });
+    } catch (error) {
+      console.error('Error al eliminar :', error);
+      res.status(500).json({ error: 'Error del servidor' });
+    }
   }
+
+
 
 module.exports = {
     CreateFood, UpdateFoodInformation, DeleteFood, GetUserFoods,

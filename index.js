@@ -137,11 +137,13 @@ app.delete('/api/Module4/DeleteActivity/:AID', async (req, res) => {
 //add
 app.post('/api/Module4/CreateGlucoseReading', async (req, res) => {
   const newGlucoseReading = req.body; // Datos de la nueva lectura de glucosa
-  CreateGlucoseReading(req, res, newGlucoseReading);
+  const UID = UID_Session.getGlobalUid();
+  CreateGlucoseReading(req, res, newGlucoseReading, UID);
 });
 
-app.get('/api/Module4/GetGlucoseReadings/:UID', async (req, res) => {
-  const UID = req.params.UID; // Obtener el UID del usuario
+//obtener lecturas
+app.get('/api/Module4/GetGlucoseReadings', async (req, res) => {
+  const UID = UID_Session.getGlobalUid(); // Obtener el UID del usuario
   GetGlucoseReadings(req, res, UID);
 });
 
@@ -150,10 +152,10 @@ app.put('/api/Module4/UpdateGlucoseReading/:Number', async (req, res) => {
   const updatedGlucoseReading = req.body; // Datos actualizados del registro de glucosa
   UpdateGlucoseReadingByNumber(req, res, Number, updatedGlucoseReading);
 });
-
-app.delete('/api/Module4/DeleteGlucoseReading/:Number', async (req, res) => {
-  const Number = req.params.Number; // Obtener el Number del registro de glucosa a eliminar
-  DeleteGlucoseReading(req, res, Number);
+//eliminar lecturas
+app.delete('/api/Module4/DeleteGlucoseReading/:RID', async (req, res) => {
+  const RID = req.params.RID; // Obtener el Number del registro de glucosa a eliminar
+  DeleteGlucoseReading(req, res, RID);
 });
 
 
