@@ -17,7 +17,7 @@ const { Login } = require('./Module2/Module2Function');
 const { EditUserInformation,GetUserInformation, DeleteUserAccount, test } = require('./Module3/Module3Function');
 const {CreateFood, UpdateFoodInformation, DeleteFood, GetUserFoods,
   CreateActivity, GetActivitiesByUID, UpdateActivity, DeleteActivity, 
-  CreateGlucoseReading, GetGlucoseReadings, UpdateGlucoseReadingByNumber, DeleteGlucoseReading} = require('./Module4/Module4Functions');
+  CreateGlucoseReading, GetGlucoseReadings, UpdateGlucoseReadingByNumber, DeleteGlucoseReading, getLatestGlucoseReading} = require('./Module4/Module4Functions');
 
   const UID_Session = require('./variablesGlobales');
 //-------------------------------------END POINTS----------------------------
@@ -145,6 +145,11 @@ app.post('/api/Module4/CreateGlucoseReading', async (req, res) => {
 app.get('/api/Module4/GetGlucoseReadings', async (req, res) => {
   const UID = UID_Session.getGlobalUid(); // Obtener el UID del usuario
   GetGlucoseReadings(req, res, UID);
+});
+
+app.get('/api/Module4/GetGlucoseReadingsLast', async (req, res) => {
+  const UID = UID_Session.getGlobalUid(); // Obtener el UID del usuario
+  getLatestGlucoseReading(req, res, UID);
 });
 
 app.put('/api/Module4/UpdateGlucoseReading/:Number', async (req, res) => {

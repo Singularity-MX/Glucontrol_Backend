@@ -293,35 +293,102 @@ async function DeleteFood(req, res, FID) {
 
 
 
-  //pendiente
-  function UpdateGlucoseReadingByNumber(req, res, Number, updatedGlucoseReading) {
+  async function getLatestGlucoseReading(req, res, UID) {
 
-    connection.query('SELECT * FROM Value_Categories', (error, valueCategories) => {
-      if (error) {
-        console.error('Error al consultar las categorías de valores:', error);
-        res.sendStatus(500); // Error del servidor
-      } else {
-        // Asignar la categoría según el nivel de glucosa
-        const category = assignCategory(updatedGlucoseReading.Glucose_level, valueCategories);
-        updatedGlucoseReading.Category = category;
+    try {
+      // Consultar la base de datos para obtener FID, Food_name y Classification relacionados con un usuario específico (UID)
+      const query = `
+      SELECT *
+FROM "glucose_readings"
+WHERE "UID" = $1
+ORDER BY "Registration_date" DESC, "Hour" DESC
+LIMIT 1
+
+      `;
+      const values = [UID];
   
-        connection.query('UPDATE Glucose_readings SET ? WHERE Number = ?', [updatedGlucoseReading, Number], (error, results) => {
-          if (error) {
-            console.error('Error al actualizar el registro de glucosa:', error);
-            res.sendStatus(500); // Error del servidor
-          } else {
-            if (results.affectedRows > 0) {
-              // El registro de glucosa se actualizó correctamente
-              res.sendStatus(200); // Código 200 para indicar éxito
-            } else {
-              // No se encontró un registro de glucosa con el Number proporcionado
-              res.sendStatus(404); // Código 404 para indicar que no se encontró el recurso
-            }
-          }
-        });
+      const result = await connection.query(query, values);
+      console.log('> Obteniendo ultima lecturas ✓ ('+UID+')');
+      res.status(200).json(result.rows);
+    } catch (error) {
+      console.error('Error al obtener las actividades:', error);
+      res.status(500).json({ error: 'Error del servidor' });
+    }
+  }
+
+  
+  // Define la función queryPromise para realizar consultas a la base de datos y devolver una promesa
+function queryPromise(sql, params) {
+  return new Promise((resolve, reject) => {
+    connection.query(sql, params, (error, results) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(results);
       }
     });
+  });
+}
+
+// Luego, puedes definir la función UpdateGlucoseReadingByNumber y utilizar query
+
+
+  //pendiente
+  async function UpdateGlucoseReadingByNumber(req, res, RID, updatedGlucoseReading) {
+    try {
+      // Consultar la base de datos para obtener las categorías de valores
+      const query = `
+        SELECT *
+        FROM "value_Categories"
+      `;
+      const result = await connection.query(query);
+  
+      // Obtener la categoría
+      const category = assignCategory(updatedGlucoseReading.Glucose_level, result.rows);
+  
+      // Actualizar el registro de glucosa en la tabla "glucose_readings"
+      const updateQuery = `
+        UPDATE "glucose_readings"
+        SET
+          "FID" = $1,
+          "Cantidad" = $2,
+          "AID" = $3,
+          "Duration" = $4,
+          "Glucose_level" = $5,
+          "Category" = $6,
+          "Registration_date" = $7,
+          "Hour" = $8
+        WHERE "RID" = $9
+      `;
+  
+      const values = [
+        updatedGlucoseReading.FID,
+        updatedGlucoseReading.Cantidad,
+        updatedGlucoseReading.AID,
+        updatedGlucoseReading.Duration,
+        updatedGlucoseReading.Glucose_level,
+        category,
+        updatedGlucoseReading.Registration_date,
+        updatedGlucoseReading.Hour,
+        RID,
+      ];
+  
+      const updateResult = await connection.query(updateQuery, values);
+  
+      if (updateResult.rowCount > 0) {
+        // El registro de glucosa se actualizó correctamente
+        res.status(200).send('Registro de glucosa actualizado con éxito');
+      } else {
+        // No se encontró un registro de glucosa con el RID proporcionado
+        res.status(404).send('No se encontró el registro de glucosa');
+      }
+    } catch (error) {
+      console.error('Error al actualizar el registro de glucosa:', error);
+      res.status(500).send('Error del servidor');
+    }
   }
+  
+  
   
 
   async function DeleteGlucoseReading(req, res, RID) {
@@ -355,7 +422,7 @@ async function DeleteFood(req, res, FID) {
 module.exports = {
     CreateFood, UpdateFoodInformation, DeleteFood, GetUserFoods,
     CreateActivity, GetActivitiesByUID, UpdateActivity, DeleteActivity,
-    CreateGlucoseReading, GetGlucoseReadings, UpdateGlucoseReadingByNumber, DeleteGlucoseReading
+    CreateGlucoseReading, GetGlucoseReadings, UpdateGlucoseReadingByNumber, DeleteGlucoseReading, getLatestGlucoseReading
 }
 
 
