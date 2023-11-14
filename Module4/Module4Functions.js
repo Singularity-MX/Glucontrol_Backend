@@ -332,8 +332,6 @@ function queryPromise(sql, params) {
 
 // Luego, puedes definir la función UpdateGlucoseReadingByNumber y utilizar query
 
-
-  //pendiente
   async function UpdateGlucoseReadingByNumber(req, res, RID, updatedGlucoseReading) {
     try {
       // Consultar la base de datos para obtener las categorías de valores
@@ -418,11 +416,59 @@ function queryPromise(sql, params) {
   }
 
 
+  async function GetMostRegisteredAID(req, res, UID) {
+    try {
+      // Consultar la base de datos para obtener las AID más registradas
+      const query = `
+        SELECT "AID", COUNT("AID") as "Numero_Registros"
+        FROM "glucose_readings"
+        WHERE "UID" = $1
+        GROUP BY "AID"
+        ORDER BY "Numero_Registros" DESC
+        LIMIT 10; -- Puedes ajustar este límite según tus necesidades
+      `;
+      const values = [UID];
+  
+      const result = await connection.query(query, values);
+      console.log('> Obteniendo AID más registradas ✓ (' + UID + ')');
+      res.status(200).json(result.rows);
+    } catch (error) {
+      console.error('Error al obtener las AID más registradas:', error);
+      res.status(500).json({ error: 'Error del servidor' });
+    }
+  }
+  
+
+
+  async function GetMostRegisteredFID(req, res, UID) {
+    try {
+      // Consultar la base de datos para obtener los FID más registrados
+      const query = `
+        SELECT "FID", COUNT("FID") as "Numero_Registros"
+        FROM "glucose_readings"
+        WHERE "UID" = $1
+        GROUP BY "FID"
+        ORDER BY "Numero_Registros" DESC
+        LIMIT 10; -- Puedes ajustar este límite según tus necesidades
+      `;
+      const values = [UID];
+  
+      const result = await connection.query(query, values);
+      console.log('> Obteniendo FID más registrados ✓ (' + UID + ')');
+      res.status(200).json(result.rows);
+    } catch (error) {
+      console.error('Error al obtener los FID más registrados:', error);
+      res.status(500).json({ error: 'Error del servidor' });
+    }
+  }
+
+  
 
 module.exports = {
     CreateFood, UpdateFoodInformation, DeleteFood, GetUserFoods,
     CreateActivity, GetActivitiesByUID, UpdateActivity, DeleteActivity,
-    CreateGlucoseReading, GetGlucoseReadings, UpdateGlucoseReadingByNumber, DeleteGlucoseReading, getLatestGlucoseReading
+    CreateGlucoseReading, GetGlucoseReadings, UpdateGlucoseReadingByNumber, DeleteGlucoseReading, getLatestGlucoseReading,
+    GetMostRegisteredAID, GetMostRegisteredFID
 }
 
 

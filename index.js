@@ -17,7 +17,8 @@ const { Login } = require('./Module2/Module2Function');
 const { EditUserInformation,GetUserInformation, DeleteUserAccount, test } = require('./Module3/Module3Function');
 const {CreateFood, UpdateFoodInformation, DeleteFood, GetUserFoods,
   CreateActivity, GetActivitiesByUID, UpdateActivity, DeleteActivity, 
-  CreateGlucoseReading, GetGlucoseReadings, UpdateGlucoseReadingByNumber, DeleteGlucoseReading, getLatestGlucoseReading} = require('./Module4/Module4Functions');
+  CreateGlucoseReading, GetGlucoseReadings, UpdateGlucoseReadingByNumber, DeleteGlucoseReading, getLatestGlucoseReading,
+  GetMostRegisteredAID, GetMostRegisteredFID } = require('./Module4/Module4Functions');
 
   const UID_Session = require('./variablesGlobales');
 //-------------------------------------END POINTS----------------------------
@@ -163,6 +164,21 @@ app.delete('/api/Module4/DeleteGlucoseReading/:RID', async (req, res) => {
   DeleteGlucoseReading(req, res, RID);
 });
 
+
+//obtener actividad mas registrada
+  // Obtener AID más registradas
+  app.get('/api/Module4/GetMostRegisteredAID', async (req, res) => {
+    const UID = UID_Session.getGlobalUid(); // Obtener el UID del usuario
+    GetMostRegisteredAID(req, res, UID);
+  });
+
+    
+  // Obtener FID más registrados
+  app.get('/api/Module4/GetMostRegisteredFID', async (req, res) => {
+    const UID = UID_Session.getGlobalUid(); // Obtener el UID del usuario
+    GetMostRegisteredFID(req, res, UID);
+  });
+  
 
 // Ruta de ejemplo
 app.get('/', (req, res) => {
