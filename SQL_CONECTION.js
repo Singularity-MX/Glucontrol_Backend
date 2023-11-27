@@ -57,6 +57,8 @@ function typeWelcomeMessage() {
   }, loadingDuration);
 }
 
+
+
 module.exports = connection;
 
 
