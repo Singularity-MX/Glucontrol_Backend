@@ -6,7 +6,9 @@
   "scripts": {
     "test": "jest",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "webpack --config webpack.config.js", 
+    "test-build": "npm run build && jest" 
   },
   "repository": {
     "type": "git",
