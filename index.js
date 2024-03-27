@@ -1,36 +1,37 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const port = 3000;
+
 const app = express();
 // Enable CORS for all routes
 app.use(cors());
 
+const port = process.env.PORT || 5000;
 // Configurar bodyParser para analizar el cuerpo de las solicitudes POST
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
 //IMPORTS
-const { InsertarUsuarios} = require('./Module1/Module1Functions');
+const { InsertarUsuarios } = require('./Module1/Module1Functions');
 const { Login } = require('./Module2/Module2Function');
-const { EditUserInformation,GetUserInformation, DeleteUserAccount, test } = require('./Module3/Module3Function');
-const {CreateFood, UpdateFoodInformation, DeleteFood, GetUserFoods,
-  CreateActivity, GetActivitiesByUID, UpdateActivity, DeleteActivity, 
+const { EditUserInformation, GetUserInformation, DeleteUserAccount, test } = require('./Module3/Module3Function');
+const { CreateFood, UpdateFoodInformation, DeleteFood, GetUserFoods,
+  CreateActivity, GetActivitiesByUID, UpdateActivity, DeleteActivity,
   CreateGlucoseReading, GetGlucoseReadings, UpdateGlucoseReadingByNumber, DeleteGlucoseReading, getLatestGlucoseReading,
   GetMostRegisteredAID, GetMostRegisteredFID } = require('./Module4/Module4Functions');
 
-  const UID_Session = require('./variablesGlobales');
+const UID_Session = require('./variablesGlobales');
 //-------------------------------------END POINTS----------------------------
 //------------------------------------------------------------- MODULO 1
 //////- REGISTRAR
 app.post('/api/Module1/Login/Insert', async (req, res) => {
   //Método para registrar al usuario
   const formData = req.body;
-//console.log(formData);
-  
+  //console.log(formData);
+
   InsertarUsuarios(req, res, formData);
- 
+
 });
 //------------------------------------------------------------- MODULO 2
 //////- login
@@ -54,7 +55,7 @@ app.put('/api/Module3/EditUser/:UID', async (req, res) => {
 // Obtener info del usuario
 app.get('/api/Module3/GetUser/:UID', async (req, res) => {
   const UID = req.params.UID; // Obtener el UID del usuario a consultar
-  console.log("EL UID DADO ES: "+UID);
+  console.log("EL UID DADO ES: " + UID);
   GetUserInformation(req, res, UID);
 });
 
@@ -166,19 +167,19 @@ app.delete('/api/Module4/DeleteGlucoseReading/:RID', async (req, res) => {
 
 
 //obtener actividad mas registrada
-  // Obtener AID más registradas
-  app.get('/api/Module4/GetMostRegisteredAID', async (req, res) => {
-    const UID = UID_Session.getGlobalUid(); // Obtener el UID del usuario
-    GetMostRegisteredAID(req, res, UID);
-  });
+// Obtener AID más registradas
+app.get('/api/Module4/GetMostRegisteredAID', async (req, res) => {
+  const UID = UID_Session.getGlobalUid(); // Obtener el UID del usuario
+  GetMostRegisteredAID(req, res, UID);
+});
 
-    
-  // Obtener FID más registrados
-  app.get('/api/Module4/GetMostRegisteredFID', async (req, res) => {
-    const UID = UID_Session.getGlobalUid(); // Obtener el UID del usuario
-    GetMostRegisteredFID(req, res, UID);
-  });
-  
+
+// Obtener FID más registrados
+app.get('/api/Module4/GetMostRegisteredFID', async (req, res) => {
+  const UID = UID_Session.getGlobalUid(); // Obtener el UID del usuario
+  GetMostRegisteredFID(req, res, UID);
+});
+
 
 // Ruta de ejemplo
 app.get('/', (req, res) => {
@@ -196,5 +197,5 @@ app.post('/test', async (req, res) => {
 // Inicia el servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
-  
+
 });

@@ -1,9 +1,10 @@
 const { Pool } = require('pg');
 
+const host = process.env.HOSTDB || 'localhost';
 
 const connection = new Pool({
   user: 'postgres',
-  host: 'localhost', // o la dirección de tu servidor PostgreSQL
+  host: host, // o la dirección de tu servidor PostgreSQL
   database: 'glucontroldb',
   password: 'root',
   port: 5432, // El puerto predeterminado de PostgreSQL es 5432
