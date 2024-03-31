@@ -6,7 +6,7 @@ const app = express();
 // Enable CORS for all routes
 app.use(cors());
 
-const SERVER_PORT = process.env.PORT || 5000;
+const SERVER_PORT = process.env.ServerPORT || 5000;
 // Configurar bodyParser para analizar el cuerpo de las solicitudes POST
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
