@@ -6,7 +6,7 @@ const app = express();
 // Enable CORS for all routes
 app.use(cors());
 
-const port = process.env.PORT || 5000;
+const SERVER_PORT = process.env.PORT || 5000;
 // Configurar bodyParser para analizar el cuerpo de las solicitudes POST
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -195,7 +195,7 @@ app.post('/test', async (req, res) => {
 });
 
 // Inicia el servidor
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
+app.listen(SERVER_PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${SERVER_PORT}`);
 
 });
