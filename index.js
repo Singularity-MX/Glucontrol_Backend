@@ -1,18 +1,24 @@
+
+//-------------------------------------REQUIRE---------------------------//
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const UID_Session = require('./variablesGlobales');
+const os = require('os');
+const path = require('path');
 
+//-------------------------------------CONFIG SERVER---------------------------//
 const app = express();
-// Enable CORS for all routes
 app.use(cors());
-
-const SERVER_PORT = process.env.ServerPORT || 5000;
-// Configurar bodyParser para analizar el cuerpo de las solicitudes POST
+const SERVER_PORT = process.env.ServerPORT || 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// Define la ruta para el directorio 'public'
+app.use(express.static(path.join(__dirname, 'public')));
 
 
-//IMPORTS
+//-------------------------------------IMPORTS FUNCTIONS--------------------------//
+
 const { InsertarUsuarios } = require('./Module1/Module1Functions');
 const { Login } = require('./Module2/Module2Function');
 const { EditUserInformation, GetUserInformation, DeleteUserAccount, test } = require('./Module3/Module3Function');
@@ -21,30 +27,27 @@ const { CreateFood, UpdateFoodInformation, DeleteFood, GetUserFoods,
   CreateGlucoseReading, GetGlucoseReadings, UpdateGlucoseReadingByNumber, DeleteGlucoseReading, getLatestGlucoseReading,
   GetMostRegisteredAID, GetMostRegisteredFID } = require('./Module4/Module4Functions');
 
-const UID_Session = require('./variablesGlobales');
-//-------------------------------------END POINTS----------------------------
-//------------------------------------------------------------- MODULO 1
-//////- REGISTRAR
+
+
+  //-------------------------------------ENDPOINTS---------------------------//
+
+//--------------------> MODULO 1 (REGISTRAR USUARIOS)
 app.post('/api/Module1/Login/Insert', async (req, res) => {
   //Método para registrar al usuario
   const formData = req.body;
-  //console.log(formData);
-
   InsertarUsuarios(req, res, formData);
-
 });
-//------------------------------------------------------------- MODULO 2
-//////- login
+
+
+//--------------------> MODULO 2 (LOGIN USUARIOS)
 app.post('/api/Module2/Login', async (req, res) => {
-  //Método para registrar al usuario
   const formData = req.body;
   const UID = await Login(req, res, formData);
   UID_Session.setGlobalUid(UID);
-  //console.log(UID_Session.getGlobalUid());
 });
 
-//------------------------------------------------------------- MODULO 3
-//////- Modify user
+
+//--------------------> MODULO 3 (EDITAR USUARIOS)
 app.put('/api/Module3/EditUser/:UID', async (req, res) => {
   const UID = req.params.UID; // Obtener el UID del usuario a editar
   const dataUpdate = req.body; // Datos actualizados del usuario
@@ -67,8 +70,8 @@ app.delete('/api/Module3/DeleteUser/:UID', async (req, res) => {
 
 
 
-//------------------------------------------------------------- MODULO 4
-///////////////////////////////////////////////////////foods
+//--------------------> MODULO 4 (ALIMENTOS, ACTIVIDADES, GLUCOSA)
+//--------------------> ALIMENTOS
 // Endpoint para crear un nuevo alimento
 app.post('/api/Module4/CreateFood', async (req, res) => {
   const actData = req.body; // Datos del nuevo alimento a crear
@@ -95,12 +98,7 @@ app.delete('/api/Module4/DeleteFood/:FID', async (req, res) => {
   DeleteFood(req, res, FID);
 });
 
-
-
-
-
-
-//////////////////////////////////actividad
+//--------------------> ACTIVIDADES
 // Endpoint para crear una nueva actividad
 app.post('/api/Module4/CreateActivity', async (req, res) => {
   const newActivityData = req.body; // Datos de la nueva actividad
@@ -128,15 +126,7 @@ app.delete('/api/Module4/DeleteActivity/:AID', async (req, res) => {
   DeleteActivity(req, res, AID);
 });
 
-
-
-
-
-
-
-
-/////////////////////// glucosa
-//add
+//--------------------> GLUCOSA
 app.post('/api/Module4/CreateGlucoseReading', async (req, res) => {
   const newGlucoseReading = req.body; // Datos de la nueva lectura de glucosa
   const UID = UID_Session.getGlobalUid();
@@ -159,20 +149,20 @@ app.put('/api/Module4/UpdateGlucoseReading/:Number', async (req, res) => {
   const updatedGlucoseReading = req.body; // Datos actualizados del registro de glucosa
   UpdateGlucoseReadingByNumber(req, res, Number, updatedGlucoseReading);
 });
+
 //eliminar lecturas
 app.delete('/api/Module4/DeleteGlucoseReading/:RID', async (req, res) => {
   const RID = req.params.RID; // Obtener el Number del registro de glucosa a eliminar
   DeleteGlucoseReading(req, res, RID);
 });
 
+//--------------------> MODULO 5 (ESTADISTICAS)
 
-//obtener actividad mas registrada
 // Obtener AID más registradas
 app.get('/api/Module4/GetMostRegisteredAID', async (req, res) => {
   const UID = UID_Session.getGlobalUid(); // Obtener el UID del usuario
   GetMostRegisteredAID(req, res, UID);
 });
-
 
 // Obtener FID más registrados
 app.get('/api/Module4/GetMostRegisteredFID', async (req, res) => {
@@ -181,21 +171,24 @@ app.get('/api/Module4/GetMostRegisteredFID', async (req, res) => {
 });
 
 
-// Ruta de ejemplo
+
+//----------------------> HomePage Server
 app.get('/', (req, res) => {
-  res.send('¡Hola, mundo!');
+  // Envía el archivo index.html ubicado en la carpeta 'public'
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Obtener info del usuario
-app.post('/test', async (req, res) => {
-  const formData = req.body; // Datos de la nueva actividad
-  console.log("Entro");
-  console.log(formData);
-  //test(req, res);
-});
 
-// Inicia el servidor
+//----------------------> Inicia el server
 app.listen(SERVER_PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${SERVER_PORT}`);
-
+  const networkInterfaces = os.networkInterfaces();
+  const addresses = [];
+  Object.keys(networkInterfaces).forEach((interface) => {
+    networkInterfaces[interface].forEach((networkInterface) => {
+      if (networkInterface.family === 'IPv4' && !networkInterface.internal) {
+        addresses.push(networkInterface.address);
+      }
+    });
+  });
+  console.log(`Servidor corriendo en http://${addresses[0]}:${SERVER_PORT}`);
 });
