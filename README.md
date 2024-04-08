@@ -1,10 +1,10 @@
 # Glucontrol Backend
 
-## ¿Qué es Glucontrol?
+## ¿Qué es Glucontrol? 🩸
 
 Glucontrol es un backend desarrollado en Node.js utilizando Express, diseñado para una aplicación que permite a los usuarios registrar y controlar sus niveles de glucosa. Con Glucontrol, los usuarios pueden acceder a estadísticas y herramientas que les ayudan a monitorear y gestionar sus niveles de glucosa de manera efectiva.
 
-## Requisitos
+## Requisitos 🛠️
 - **Node.js:** Se requiere Node.js para ejecutar el backend. Puede descargarlo e instalarlo desde [aquí](https://nodejs.org/).
 - **npm:** npm es el administrador de paquetes de Node.js. Se instala automáticamente junto con Node.js.
 - **Git:** Git es necesario para clonar el repositorio de Glucontrol. Puede encontrar instrucciones de instalación en [este enlace](https://git-scm.com/).
@@ -26,7 +26,7 @@ Puedes instalarlos de la siguiente forma:
     sudo dnf install nodejs npm git
     ```
 
-## Base de Datos
+## Base de Datos 🗃️
 
 Glucontrol utiliza una base de datos PostgreSQL para almacenar los datos de los usuarios y sus niveles de glucosa. Debe crear una instancia de base de datos con los siguientes datos de conexión:
 
@@ -39,7 +39,7 @@ const PORT_DB = process.env.PORT || 5432;
 ```
 Estos datos pueden configurarse en el archivo SQL_CONECTION.js. Además, en la carpeta documents se proporciona el script necesario para crear la base de datos.
 
-## Instrucciones para instalar
+## Instrucciones para instalar 🚀
 Para comenzar a utilizar Glucontrol, siga estos pasos:
 1. Clone el repositorio de Glucontrol utilizando Git:
     ```bash
@@ -54,16 +54,16 @@ Para comenzar a utilizar Glucontrol, siga estos pasos:
     ```bash
     npx nodemon index.js
     ```
-## Endpoint de Vista
+## Endpoint de Vista 👁️
 Una vez que el servidor esté en funcionamiento, puede acceder al endpoint de vista principal en la ruta /.
 
 ![La vista será la siguiente:](https://github.com/Singularity-MX/Backend-Glucontrol/blob/main/Documents/HomePageView.png?raw=true)
 
 
-##  Licencia
+##  Licencia 📝
 Este proyecto está bajo la Licencia MIT. Consulte el archivo LICENSE para obtener más información.
 
-## Créditos de Desarrollo
+## Créditos de desarrollo 🌟
 Desarrollado por [ReplacedSpace17](https://github.com/ReplacedSpace17).
 Cuerpo Académico de Bioinformática y Tecnología Computacional (CABTC) -> TecNM Campus León (POSGRADO)
 
