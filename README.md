@@ -1,5 +1,7 @@
 # Glucontrol Backend
 
+![](https://github.com/Singularity-MX/Backend-Glucontrol/blob/main/Glucontrol.png?raw=true)
+
 ## ¿Qué es Glucontrol? 🩸
 
 Glucontrol es un backend desarrollado en Node.js utilizando Express, diseñado para una aplicación que permite a los usuarios registrar y controlar sus niveles de glucosa. Con Glucontrol, los usuarios pueden acceder a estadísticas y herramientas que les ayudan a monitorear y gestionar sus niveles de glucosa de manera efectiva.
