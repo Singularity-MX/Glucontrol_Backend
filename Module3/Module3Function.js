@@ -58,7 +58,7 @@ function EditUserInformation(req, res, UID, data) {
           // Verificar si las actualizaciones se realizaron correctamente
           if (results1.rowCount > 0 && results2.rowCount > 0) {
             // Ambas tablas se actualizaron correctamente
-            console.log('Usuario editado');
+            //console.log('Usuario editado');
             res.sendStatus(200); // Código 200 para indicar éxito
           } else {
             // No se encontró un usuario con el UID proporcionado en alguna de las tablas
@@ -81,7 +81,7 @@ async function GetUserInformation(req, res, UID) {
     const { rows } = await connection.query(query, [UID]);
 
     if (rows.length > 0) {
-      console.log('Resultados de la consulta:');
+      //console.log('Resultados de la consulta:');
       console.table(rows);
       res.status(200).json(rows);
     } else {
@@ -106,7 +106,7 @@ async function DeleteUserAccount(req, res, UID) {
     // Realizar una consulta para eliminar el registro en la tabla "personal_information"
     const deletePersonalQuery = 'DELETE FROM personal_information WHERE "UID" = $1;';
     await connection.query(deletePersonalQuery, [UID]);
-    console.log('Usuario eliminado');
+    //console.log('Usuario eliminado');
     // Si llegamos a este punto, la eliminación fue exitosa
     res.status(200).json({ message: 'Registro eliminado correctamente' });
   } catch (error) {
@@ -121,7 +121,7 @@ async function test(req, res) {
   try {
     const query = 'SELECT * FROM users';
     const { rows } = await connection.query(query);
-    console.log('Resultados de la consulta:');
+    //console.log('Resultados de la consulta:');
     console.table(rows);
     res.sendStatus(200);
   } catch (error) {

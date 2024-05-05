@@ -32,7 +32,7 @@ async function CreateFood(req, res, foodData, UID) {
     const values = [newFood.FID, newFood.UID, newFood.Food_name, newFood.Classification];
 
     await connection.query(insertQuery, values);
-    console.log('> Nuevo alimento ('+newFood.Food_name+' -> '+ newFood.Classification+' )');
+    //console.log('> Nuevo alimento ('+newFood.Food_name+' -> '+ newFood.Classification+' )');
     // Si llegamos a este punto, la inserción fue exitosa
     res.status(200).json({ message: 'Alimento creado exitosamente' });
   } catch (error) {
@@ -55,7 +55,7 @@ async function GetUserFoods(req, res, UID) {
     const values = [UID];
 
     const result = await connection.query(query, values);
-    console.log('> Obteniendo Alimentos ✓ ('+UID+')');
+    //console.log('> Obteniendo Alimentos ✓ ('+UID+')');
     res.status(200).json(result.rows);
   } catch (error) {
     console.error('Error al obtener los alimentos:', error);
@@ -78,7 +78,7 @@ async function UpdateFoodInformation(req, res, FID, updatedFoodData) {
 
     if (result.rowCount > 0) {
       // La información del alimento se actualizó correctamente
-      console.log('> '+updatedFoodData.Food_name+' Modificado ✓ ');
+      //console.log('> '+updatedFoodData.Food_name+' Modificado ✓ ');
       res.status(200).json({ message: 'Información del alimento actualizada exitosamente' });
     } else {
       // No se encontró un alimento con el FID proporcionado
@@ -106,7 +106,7 @@ async function DeleteFood(req, res, FID) {
 
     if (result.rowCount > 0) {
       // El alimento se eliminó correctamente
-      console.log('> (' +FID + ') Eliminado ✓ ');
+      //console.log('> (' +FID + ') Eliminado ✓ ');
       res.status(200).json({ message: 'Alimento eliminado exitosamente' });
     } else {
       // No se encontró un alimento con el FID proporcionado
@@ -136,7 +136,7 @@ async function DeleteFood(req, res, FID) {
       const values = [AID, UID, actData.Activitie_name, actData.Classification];
   
       await connection.query(insertQuery, values);
-      console.log('> Nueva actividad ('+actData.Activitie_name+' -> '+ actData.Classification+' )');
+      //console.log('> Nueva actividad ('+actData.Activitie_name+' -> '+ actData.Classification+' )');
       // Si llegamos a este punto, la inserción fue exitosa
       res.status(200).json({ message: 'Actividad creada exitosamente' });
     } catch (error) {
@@ -157,7 +157,7 @@ async function DeleteFood(req, res, FID) {
       const values = [UID];
   
       const result = await connection.query(query, values);
-      console.log('> Obteniendo Actividades ✓ ('+UID+')');
+      //console.log('> Obteniendo Actividades ✓ ('+UID+')');
       res.status(200).json(result.rows);
     } catch (error) {
       console.error('Error al obtener las actividades:', error);
@@ -180,7 +180,7 @@ async function DeleteFood(req, res, FID) {
   
       if (result.rowCount > 0) {
         // La información del alimento se actualizó correctamente
-        console.log('> '+newDataActivitie.Activitie_name+' Modificado ✓ ');
+        //console.log('> '+newDataActivitie.Activitie_name+' Modificado ✓ ');
         res.status(200).json({ message: 'Información de actividad actualizada exitosamente' });
       } else {
         // No se encontró un alimento con el FID proporcionado
@@ -206,7 +206,7 @@ async function DeleteFood(req, res, FID) {
   
       if (result.rowCount > 0) {
         // El alimento se eliminó correctamente
-        console.log('> (' +AID + ') Eliminado ✓ ');
+        //console.log('> (' +AID + ') Eliminado ✓ ');
         res.status(200).json({ message: 'Actividad eliminado exitosamente' });
       } else {
         // No se encontró un alimento con el FID proporcionado
@@ -257,7 +257,7 @@ async function DeleteFood(req, res, FID) {
           category, formData.Registration_date, formData.Hour];
     
         await connection.query(insertQuery, values);
-        console.log('> Nueva lectura Level:'+formData.Glucose_level + ' mg/dl ('+category+')');
+        //console.log('> Nueva lectura Level:'+formData.Glucose_level + ' mg/dl ('+category+')');
         // Si llegamos a este punto, la inserción fue exitosa
         res.status(200).json({ message: 'Lectura creada exitosamente' });
       } catch (error) {
@@ -283,7 +283,7 @@ async function DeleteFood(req, res, FID) {
       const values = [UID];
   
       const result = await connection.query(query, values);
-      console.log('> Obteniendo lecturas ✓ ('+UID+')');
+      //console.log('> Obteniendo lecturas ✓ ('+UID+')');
       res.status(200).json(result.rows);
     } catch (error) {
       console.error('Error al obtener las actividades:', error);
@@ -308,7 +308,7 @@ LIMIT 1
       const values = [UID];
   
       const result = await connection.query(query, values);
-      console.log('> Obteniendo ultima lecturas ✓ ('+UID+')');
+      //console.log('> Obteniendo ultima lecturas ✓ ('+UID+')');
       res.status(200).json(result.rows);
     } catch (error) {
       console.error('Error al obtener las actividades:', error);
@@ -403,7 +403,7 @@ function queryPromise(sql, params) {
   
       if (result.rowCount > 0) {
         // El alimento se eliminó correctamente
-        console.log('> (' +RID + ') Eliminado ✓ ');
+        //console.log('> (' +RID + ') Eliminado ✓ ');
         res.status(200).json({ message: 'Lectura eliminado exitosamente' });
       } else {
         // No se encontró un alimento con el FID proporcionado
@@ -430,7 +430,7 @@ function queryPromise(sql, params) {
       const values = [UID];
   
       const result = await connection.query(query, values);
-      console.log('> Obteniendo AID más registradas ✓ (' + UID + ')');
+      //console.log('> Obteniendo AID más registradas ✓ (' + UID + ')');
       res.status(200).json(result.rows);
     } catch (error) {
       console.error('Error al obtener las AID más registradas:', error);
@@ -454,7 +454,7 @@ function queryPromise(sql, params) {
       const values = [UID];
   
       const result = await connection.query(query, values);
-      console.log('> Obteniendo FID más registrados ✓ (' + UID + ')');
+      //console.log('> Obteniendo FID más registrados ✓ (' + UID + ')');
       res.status(200).json(result.rows);
     } catch (error) {
       console.error('Error al obtener los FID más registrados:', error);

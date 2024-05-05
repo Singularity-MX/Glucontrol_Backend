@@ -58,7 +58,7 @@ app.put('/api/Module3/EditUser/:UID', async (req, res) => {
 // Obtener info del usuario
 app.get('/api/Module3/GetUser/:UID', async (req, res) => {
   const UID = req.params.UID; // Obtener el UID del usuario a consultar
-  console.log("EL UID DADO ES: " + UID);
+  //console.log("EL UID DADO ES: " + UID);
   GetUserInformation(req, res, UID);
 });
 
@@ -190,5 +190,5 @@ app.listen(SERVER_PORT, () => {
       }
     });
   });
-  console.log(`Servidor corriendo en http://${addresses[0]}:${SERVER_PORT}`);
+  //console.log(`Servidor corriendo en http://${addresses[0]}:${SERVER_PORT}`);
 });

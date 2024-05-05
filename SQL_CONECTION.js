@@ -21,8 +21,8 @@ connection.connect((error, client, done) => {
   if (error) {
     console.error('Error al conectar a la base de datos:', error);
   } else {
-    console.log('Conexión exitosa a la base de datos\n');
-   // console.log('------------------🚀🖥️ BIENVENIDO AL BACKEND DE GLUCONTROL 🖥️🚀 --------------------\n');
+    //console.log('Conexión exitosa a la base de datos\n');
+   // //console.log('------------------🚀🖥️ BIENVENIDO AL BACKEND DE GLUCONTROL 🖥️🚀 --------------------\n');
     typeWelcomeMessage();
   }
 });
@@ -32,36 +32,7 @@ const loadingChars = '▉▊▋▌▍▎▏';
 const delay = 50;
 
 function typeWelcomeMessage() {
-  let loadingIndex = 0;
-  let currentIndex = 0;
-  const loadingDuration = 2000; // Duración de la animación de carga en milisegundos
-
-  const intervalId = setInterval(() => {
-    const loadingChar = loadingChars[loadingIndex];
-    process.stdout.clearLine();
-    process.stdout.cursorTo(0);
-    process.stdout.write(`Loading... ${loadingChar}`);
-    loadingIndex = (loadingIndex + 1) % loadingChars.length;
-
-    if (currentIndex === welcomeMessage.length) {
-      clearInterval(intervalId);
-      process.stdout.clearLine();
-      process.stdout.cursorTo(0);
-      process.stdout.write(welcomeMessage);
-      process.stdout.write('\n');
-    } else {
-      process.stdout.write(welcomeMessage.slice(0, currentIndex));
-      currentIndex++;
-    }
-  }, delay);
-
-  setTimeout(() => {
-    clearInterval(intervalId);
-    process.stdout.clearLine();
-    process.stdout.cursorTo(0);
-    process.stdout.write(welcomeMessage);
-    process.stdout.write('\n');
-  }, loadingDuration);
+  console.log('Corriendo Backend de Glucontrol...');
 }
 
 
