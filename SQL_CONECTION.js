@@ -8,12 +8,11 @@ const DB_NAME = process.env.DATABASE || 'glucontroldb';
 const PORT_DB = process.env.PORT || 5432;
 
 const connection = new Pool({
-  user: USR_NAME,
-  host: HOST_DB, // o la dirección de tu servidor PostgreSQL
-  database: DB_NAME,
-  password: PWD_DB,
-  port: PORT_DB, // El puerto predeterminado de PostgreSQL es 5432
-  ssl: true, // Habilita la conexión SSL
+  user: 'postgres',
+  host: 'localhost', // o la dirección de tu servidor PostgreSQL
+  database: 'glucontroldb',
+  password: 'root',
+  port: 5432, // El puerto predeterminado de PostgreSQL es 5432
 });
 
 
