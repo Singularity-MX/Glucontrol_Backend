@@ -1,3 +1,5 @@
+Use glucontrol_db;
+
 CREATE TABLE "users" (
   "UID" VARCHAR(255) PRIMARY KEY,
   "Email" VARCHAR(255),
