@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - HOSTDB=db
+      - USERDB=${USERDB}
+      - PASSWORD=${PASSWORD}
+      - DATABASE=${DATABASE}
+      - PORT=3306
+    depends_on:
+      - db
+    volumes:
+      - .:/usr/src/app
+    command: ["/usr/local/bin/wait-for-it.sh", "db:3306", "--", "npm", "start"]
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PASSWORD}
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_USER: ${USERDB}
+      MYSQL_PASSWORD: ${PASSWORD}
+    ports:
+      - "3307:3306"  # Cambiado para evitar conflicto con el host
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db_data:
