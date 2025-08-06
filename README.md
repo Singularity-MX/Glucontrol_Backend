@@ -1,6 +1,6 @@
 # Glucontrol Backend
 
-Backend para la aplicación **Glucontrol**, encargado de la gestión y almacenamiento de datos relacionados con el monitoreo y control glucémico desarrollado cómo parte del proyecto de residencias profesionales, para la obtención del título correspondiente a la licenciatura  "*Ingeniería en sistemas computacionales*". Este proyecto fué realizado en el **Cuerpo Académico de Bioinformática y Tecnología Computacional** adscrito en el Departamento de Estudios de Posgrado e Investigación (DEPI) en el **Tecnológico Nacional de México campus León**.
+Backend para la aplicación **Glucontrol**, encargado de la gestión y almacenamiento de datos relacionados con el monitoreo y control glucémico desarrollado cómo parte del proyecto de residencias profesionales, para la obtención del título correspondiente a la licenciatura "*Ingeniería en sistemas computacionales*". Este proyecto fué realizado en el **Cuerpo Académico de Bioinformática y Tecnología Computacional** adscrito en el Departamento de Estudios de Posgrado e Investigación (DEPI) en el **Tecnológico Nacional de México campus León**.
 
 
 ## Tabla de Contenidos
@@ -51,12 +51,12 @@ https://github.com/Singularity-MX/Glucontrol_App
 1. Clonar el repositorio:
 
 ```bash
-git  clone  https://github.com/Singularity-MX/Glucontrol_Backend.git
-cd  Glucontrol_Backend
+git clone https://github.com/Singularity-MX/Glucontrol_Backend.git
+cd Glucontrol_Backend
 ```
 2. Instalar dependencias:
 ```bash
-npm  install
+npm install
 ```
 3. Crear la base de datos:
 ```bash
@@ -76,7 +76,7 @@ PORT=3306
 ```
 5. Ejecutar la aplicación:
 ```bash
-npm  start
+npm start
 ```
 Validar que el backend esté corriendo en el http://localhost:3000/
 
@@ -84,8 +84,8 @@ Validar que el backend esté corriendo en el http://localhost:3000/
 1. Clonar el repositorio:
 
 ```bash
-git  clone  https://github.com/Singularity-MX/Glucontrol_Backend.git
-cd  Glucontrol_Backend
+git clone https://github.com/Singularity-MX/Glucontrol_Backend.git
+cd Glucontrol_Backend
 ```
 2. Crea el archivo .env en la raíz del proyecto con las siguientes variables (ajústalas según tu configuración):
 
@@ -111,23 +111,23 @@ La organización del proyecto está diseñada para facilitar la escalabilidad y 
 ```text
 Glucontrol_Backend/
 │
-├── db/                    # Scripts SQL de inicialización
-├── Module1/               # Autenticación u otro módulo
-├── Module2/               # Monitoreo de glucosa
-├── Module3/               # Alertas, reportes, etc.
-├── Module4/               # Configuración / usuarios
-├── node_modules/          # Dependencias de Node.js
-├── public/                # Archivos estáticos
-├── test/                  # Pruebas unitarias e integración
+├── db/          # Scripts SQL de inicialización
+├── Module1/        # Autenticación u otro módulo
+├── Module2/        # Monitoreo de glucosa
+├── Module3/        # Alertas, reportes, etc.
+├── Module4/        # Configuración / usuarios
+├── node_modules/     # Dependencias de Node.js
+├── public/        # Archivos estáticos
+├── test/         # Pruebas unitarias e integración
 │
-├── .env                   # Variables de entorno (local)
-├── Dockerfile             # Imagen Docker
-├── docker-compose.yml     # Orquestación con Docker
-├── index.js               # Punto de entrada
-├── SQL_CONECTION.js       # Conexión a la base de datos
-├── variablesGlobales.js   # Variables globales del sistema
-├── wait-for-it.sh         # Espera activa para DB (Docker)
-└── README.md              # Documentación del proyecto
+├── .env          # Variables de entorno (local)
+├── Dockerfile       # Imagen Docker
+├── docker-compose.yml   # Orquestación con Docker
+├── index.js        # Punto de entrada
+├── SQL_CONECTION.js    # Conexión a la base de datos
+├── variablesGlobales.js  # Variables globales del sistema
+├── wait-for-it.sh     # Espera activa para DB (Docker)
+└── README.md       # Documentación del proyecto
 
 ```
 
@@ -138,12 +138,12 @@ Este proyecto está licenciado bajo los términos de la [Licencia MIT](LICENSE).
 
 Para dudas, reportes de errores, sugerencias o contribuciones al proyecto, puedes ponerte en contacto con el equipo de desarrollo:
 
--   👤 **Autor principal:** Javier Gutiérrez [@ReplacedSpace17](https://github.com/replacedspace17)
-    
--   🏫 **Institución:** Tecnológico Nacional de México campus León
-    
--   📧 **Correo:** replacedspace17@gmail.com
-    
+-  👤 **Autor principal:** Javier Gutiérrez [@ReplacedSpace17](https://github.com/replacedspace17)
+  
+-  🏫 **Institución:** Tecnológico Nacional de México campus León
+  
+-  📧 **Correo:** replacedspace17@gmail.com
+  
 También puedes abrir un _issue_ en el repositorio para reportar errores o solicitar nuevas funcionalidades.
 
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⡤⠤⠤⠤⠤⠤⠤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
